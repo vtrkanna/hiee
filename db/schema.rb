@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20140111104305) do
     t.string "first_name"
     t.string "last_name"
     t.string "email_id"
+    t.string "alternate_mail_id"
     t.date "date_of_birth"
     t.integer "password_id"
     t.string "address_1"
@@ -27,11 +28,97 @@ ActiveRecord::Schema.define(version: 20140111104305) do
     t.integer "city_id"
     t.integer "state_id"
     t.integer "country_id"
-    t.string "postcode"
+    t.string "post_code"
     t.string "mobile_no"
     t.string "subscriber_type_id"
+    t.integer "free_subscriber_id"
+    t.integer "user_name_id"
+    t.integer "status_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "free_subscribers", force: true do |t|
+    t.integer "subscriber_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "premium_subscribers", force: true do |t|
+    t.integer "subscriber_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_names", force: true do |t|
+    t.string "new"
+    t.string "old"
+    t.integer "subscriber_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "passwords", force: true do |t|
+    t.string "new"
+    t.string "old"
+    t.integer "subscriber_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "subscriber_types", force: true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "countries", force: true do |t|
+    t.string "name"
+    t.integer "region_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "cities", force: true do |t|
+    t.string "name"
+    t.integer "country_id"
+    t.integer "region_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "regions", force: true do |t|
+    t.string 'name'
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "agents", force: true do |t|
+    t.datetime 'created_at'
+    t.datetime "updated_at"
+  end
+
+  create_table "campaigns", force: true do |t|
+    t.datetime 'created_at'
+    t.datetime "updated_at"
+  end
+
+  create_table "products", force: true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "update_at"
+  end
+
+  create_table "groups", force: true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "update_at"
+  end
+
+  create_table "social_hubs", force: true do |t|
+    t.string "facebook"
+    t.datetime "created_at"
+    t.datetime "update_at"
   end
 
 end
