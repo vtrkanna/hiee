@@ -11,12 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140111104305) do
+ActiveRecord::Schema.define(:version => 20140111104305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "subscribers", force: true do |t|
+  create_table "subscribers", :force => true do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "email_id"
@@ -38,19 +38,19 @@ ActiveRecord::Schema.define(version: 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "free_subscribers", force: true do |t|
+  create_table "free_subscribers", :force => true do |t|
     t.integer "subscriber_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "premium_subscribers", force: true do |t|
+  create_table "premium_subscribers", :force => true do |t|
     t.integer "subscriber_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "user_names", force: true do |t|
+  create_table "user_names", :force => true do |t|
     t.string "new"
     t.string "old"
     t.integer "subscriber_id"
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(version: 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "passwords", force: true do |t|
+  create_table "passwords", :force => true do |t|
     t.string "new"
     t.string "old"
     t.integer "subscriber_id"
@@ -66,20 +66,20 @@ ActiveRecord::Schema.define(version: 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "subscriber_types", force: true do |t|
+  create_table "subscriber_types", :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "countries", force: true do |t|
+  create_table "countries", :force => true do |t|
     t.string "name"
     t.integer "region_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "cities", force: true do |t|
+  create_table "cities", :force => true do |t|
     t.string "name"
     t.integer "country_id"
     t.integer "region_id"
@@ -87,35 +87,35 @@ ActiveRecord::Schema.define(version: 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "regions", force: true do |t|
+  create_table "regions", :force => true do |t|
     t.string 'name'
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "agents", force: true do |t|
+  create_table "agents", :force => true do |t|
     t.datetime 'created_at'
     t.datetime "updated_at"
   end
 
-  create_table "campaigns", force: true do |t|
+  create_table "campaigns", :force => true do |t|
     t.datetime 'created_at'
     t.datetime "updated_at"
   end
 
-  create_table "products", force: true do |t|
+  create_table "products", :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "update_at"
   end
 
-  create_table "groups", force: true do |t|
+  create_table "groups", :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "update_at"
   end
 
-  create_table "social_hubs", force: true do |t|
+  create_table "social_hubs", :force => true do |t|
     t.string "facebook"
     t.datetime "created_at"
     t.datetime "update_at"
