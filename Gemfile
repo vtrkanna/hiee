@@ -9,6 +9,13 @@ gem 'rails', '4.0.1'
 #Use sqlite3 as the database for Active Record
 gem 'pg'
 
+
+#for use mongo db
+
+gem 'mongo'
+gem 'bson_ext'
+gem 'mongo_mapper'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 

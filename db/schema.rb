@@ -23,8 +23,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "alternate_mail_id"
     t.date "date_of_birth"
     t.integer "password_id"
-    t.string "address_1"
-    t.string "address_2"
+    t.integer "address_id"
     t.integer "city_id"
     t.integer "state_id"
     t.integer "country_id"
@@ -87,6 +86,21 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
+  create_table "address", :force => true do |t|
+    t.string "address_1"
+    t.string "address_2"
+    t.string "address_3"
+    t.string "address_4"
+    t.string "address_5"
+    t.integer "city_id"
+    t.integer "country_id"
+    t.integer "state_id"
+    t.string "post_code"
+    t.string "full_address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "regions", :force => true do |t|
     t.string 'name'
     t.datetime "created_at"
@@ -94,12 +108,42 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   end
 
   create_table "agents", :force => true do |t|
+    t.integer "address_id"
+    t.integer "campaign_ids"
+    t.datetime 'created_at'
+    t.datetime "updated_at"
+
+  end
+
+  create_table "campaigns", :force => true do |t|
+    t.string "name"
+    t.string "alter_name"
+    t.integer "campaign_type_id"
+    t.integer "main_office_id"
+    t.integer "agent_id"
+    t.integer "campaign_office_id"
     t.datetime 'created_at'
     t.datetime "updated_at"
   end
 
-  create_table "campaigns", :force => true do |t|
-    t.datetime 'created_at'
+  create_table "areas", :force => true do |t|
+    t.string "name"
+    t.string "email_id"
+    t.string "alternate_name"
+    t.integer "campaign_id"
+    t.integer "campaign_office_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "campaign_offices", :force => true do |t|
+    t.integer "address_id"
+    t.boolean "main_office"
+  end
+
+  create_table "campaign_types", :force => true do |t|
+    t.string "name"
+    t.datetime "created_at"
     t.datetime "updated_at"
   end
 
@@ -117,6 +161,8 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
 
   create_table "social_hubs", :force => true do |t|
     t.string "facebook"
+    t.string "google_plus"
+    t.string "twitter"
     t.datetime "created_at"
     t.datetime "update_at"
   end
