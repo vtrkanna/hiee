@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "city_id"
     t.integer "country_id"
     t.integer "state_id"
+    t.integer "region_id"
     t.string "post_code"
     t.string "full_address"
     t.datetime "created_at"
@@ -108,16 +109,17 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   end
 
   create_table "agents", :force => true do |t|
+    t.string "name"
     t.integer "address_id"
     t.integer "campaign_ids"
     t.datetime 'created_at'
     t.datetime "updated_at"
-
   end
 
   create_table "campaigns", :force => true do |t|
     t.string "name"
     t.string "alter_name"
+    t.string "description"
     t.integer "campaign_type_id"
     t.integer "main_office_id"
     t.integer "agent_id"
@@ -128,8 +130,14 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
 
   create_table "areas", :force => true do |t|
     t.string "name"
+    t.string "user_name"
+    t.integer "password_id"
     t.string "email_id"
     t.string "alternate_name"
+    t.string "telephone"
+    t.string "fax"
+    t.string "website"
+    t.string "description"
     t.integer "campaign_id"
     t.integer "campaign_office_id"
     t.datetime "created_at"
@@ -148,6 +156,13 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   end
 
   create_table "products", :force => true do |t|
+    t.string "name"
+    t.integer "product_type_id"
+    t.datetime "created_at"
+    t.datetime "update_at"
+  end
+
+  create_table "product_types", :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "update_at"
