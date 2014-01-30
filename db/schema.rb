@@ -17,17 +17,15 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   enable_extension "plpgsql"
 
   create_table "subscribers", :force => true do |t|
-    t.string "first_name"
-    t.string "last_name"
     t.string "email_id"
     t.string "alternate_mail_id"
     t.date "date_of_birth"
+    t.integer "name_id"
     t.integer "password_id"
     t.integer "address_id"
-    t.integer "contact_detail_id"
+    t.integer "contact_info_id"
     t.string "subscriber_type_id"
     t.integer "free_subscriber_id"
-    t.integer "user_name_id"
     t.integer "status_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -45,9 +43,11 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "user_names", :force => true do |t|
-    t.string "new"
-    t.string "old"
+  create_table "names", :force => true do |t|
+    t.string "first_name"
+    t.string "last_name"
+    t.string "full_name"
+    t.integer "last_used"
     t.integer "subscriber_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
 
   create_table "passwords", :force => true do |t|
     t.string "new"
-    t.string "old"
+    t.integer "old_id"
     t.integer "subscriber_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -82,7 +82,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "contact_details", :force => true do |t|
+  create_table "contact_infos", :force => true do |t|
     t.boolean "subscriber_contact"
     t.boolean "primary_contact"
     t.boolean "work_contact"
@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "password_id"
     t.string "email_id"
     t.string "alternate_name"
-    t.integer "contact_detail_id"
+    t.integer "contact_info_id"
     t.string "telephone"
     t.string "fax"
     t.string "website"
@@ -161,13 +161,13 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "area_office_id"
     t.integer "main_office_id"
     t.integer "area_review_id"
-    t.integer "contact_detail_id"
     t.integer "area_event_id"
+    t.integer "area_other_info_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "area_other_deatails", :force => true do |t|
+  create_table "area_other_infos", :force => true do |t|
     t.datetime "open_time"
     t.datetime "close_time"
     t.string "no_of_products"
@@ -207,7 +207,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.text "description"
     t.integer "image_id"
     t.integer "product_status_id"
-    t.integer "product_detail_id"
+    t.integer "product_info_id"
     t.boolean "active"
     t.boolean "expired"
     t.boolean "area_event"
@@ -219,11 +219,12 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "publish_date"
     t.datetime "expiry_date"
     t.string "tag"
+    t.integer "version_id"
     t.datetime "created_at"
     t.datetime "update_at"
   end
 
-  create_table "product_deatils", :force => true do |t|
+  create_table "product_infos", :force => true do |t|
     t.integer "product_id"
     t.integer "product_type_id"
     t.integer "video"
@@ -237,7 +238,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "update_at"
   end
 
-  create_table "product_status", :force => true do |t|
+  create_table "product_statuses", :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -257,12 +258,13 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   create_table "articles", :force => true do |t|
     t.string "title"
     t.string "sub_title"
+    t.integer "version_id"
     t.text "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "video_details", :force => true do |t|
+  create_table "video_infos", :force => true do |t|
     t.string "name"
     t.string "title"
     t.string "display_name"
@@ -284,6 +286,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "avatar_id"
     t.integer "image_id"
     t.integer "status_id"
+    t.integer "version_id"
     t.string "caption"
     t.datetime "created_by"
     t.datetime "updated_by"
@@ -312,6 +315,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "image_path"
     t.string "image_source"
     t.integer "status_id"
+    t.integer "version_id"
     t.string "caption"
     t.integer "created_by"
     t.integer "updated_by"
@@ -343,12 +347,13 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "caption"
     t.boolean "avatar"
     t.integer "avatar_id"
+    t.integer "version_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "medias", :force => true do |t|
-    t.integer "video_detail_id"
+    t.integer "video_info_id"
     t.integer "image_id"
     t.integer "product_id"
     t.integer "area_id"
@@ -357,8 +362,94 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "status", :force => true do |t|
+  create_table "statuses", :force => true do |t|
     t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sites", :force => true do |t|
+    t.string "name"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles", :force => true do |t|
+    t.string "name"
+    t.integer "status_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "effects", :force => true do |t|
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "themes", :force => true do |t|
+    t.string "name"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "templates", :force => true do |t|
+    t.string "name"
+    t.integer "site_id"
+    t.integer "status_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+  end
+
+  create_table "pages", :force => true do |t|
+    t.string "name"
+    t.integer "status_id"
+    t.integer "template_id"
+    t.integer "theme_id"
+    t.integer "site_id"
+    t.integer "page_type_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "page_types", :force => true do |t|
+    t.string "name"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "menus", :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.integer "status_id"
+    t.string "url_id"
+    t.integer "order_id"
+    t.integer "page_id"
+    t.integer "site_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "urls", :force => true do |t|
+    t.string "name"
+    t.integer "site_id"
+    t.integer "page_id"
+    t.integer "created_by"
+    t.integer "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
