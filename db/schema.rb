@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
 
   create_table "passwords", :force => true do |t|
     t.string "new"
+    t.boolean "old"
     t.integer "old_id"
     t.integer "subscriber_id"
     t.datetime "created_at"
@@ -91,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "contact_status"
     t.string "contact_type"
     t.string "primary_email"
+    t.string "delivery_email"
     t.string "alternate_email"
     t.string "primary_mobileno"
     t.string "primary_telephone"
@@ -104,6 +106,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "work_fax"
     t.text "desigination"
     t.string "work_website"
+    t.integer "social_hub_id"
     t.integer "address_id"
     t.integer "created_by"
     t.integer "updated_by"
@@ -123,6 +126,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "region_id"
     t.string "post_code"
     t.string "full_address"
+    t.boolean "old"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -163,6 +167,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "area_review_id"
     t.integer "area_event_id"
     t.integer "area_other_info_id"
+    t.integer "social_hub_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -438,6 +443,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "order_id"
     t.integer "page_id"
     t.integer "site_id"
+    t.string "page_type_id"
     t.integer "created_by"
     t.integer "updated_by"
     t.datetime "created_at"
@@ -458,8 +464,18 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "facebook"
     t.string "google_plus"
     t.string "twitter"
+    t.string "youtube"
+    t.string "blogger"
+    t.string "wordpress"
     t.datetime "created_at"
     t.datetime "update_at"
+  end
+
+  create_table "breadcrumbs", :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.datetime"created_at"
+    t.datetime "updated_at"
   end
 
 end
