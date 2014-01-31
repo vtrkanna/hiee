@@ -17,7 +17,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   enable_extension "plpgsql"
 
   create_table "subscribers", :force => true do |t|
-    t.string "email_id"
+    t.integer "email_id"
     t.string "alternate_mail_id"
     t.date "date_of_birth"
     t.integer "name_id"
@@ -54,7 +54,21 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   end
 
   create_table "emails", :force => true do |t|
-    t.datetime "primary_email"
+    t.string "primary_mail"
+    t.string "alternate_mail"
+    t.string "delivery_mail"
+    t.string "work_mail"
+    t.integer "version_id"
+    t.boolean "subscriber"
+    t.integer "subscriber_id"
+    t.boolean "agent"
+    t.integer "agent_id"
+    t.boolean "area"
+    t.boolean "area_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "passwords", :force => true do |t|
@@ -95,16 +109,13 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.boolean "agent_contact"
     t.string "contact_status"
     t.string "contact_type"
-    t.string "primary_email"
-    t.string "delivery_email"
-    t.string "alternate_email"
+    t.integer "email_id"
     t.string "primary_mobileno"
     t.string "primary_telephone"
     t.string "alternate_nubmer"
     t.string "fax"
     t.string "work_mobile"
     t.string "work_telephone"
-    t.string "work_email"
     t.string "work_location"
     t.string "work_type"
     t.string "work_fax"
@@ -157,7 +168,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "user_name"
     t.datetime "display_name"
     t.integer "password_id"
-    t.string "email_id"
+    t.integer "email_id"
     t.string "alternate_name"
     t.integer "contact_info_id"
     t.string "telephone"
