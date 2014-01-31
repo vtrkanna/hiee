@@ -53,6 +53,10 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
+  create_table "emails", :force => true do |t|
+    t.datetime "primary_email"
+  end
+
   create_table "passwords", :force => true do |t|
     t.string "new"
     t.boolean "old"
@@ -140,8 +144,8 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   create_table "agents", :force => true do |t|
     t.string "name"
     t.string "alter_name"
-    t.text "description"
     t.integer "address_id"
+    t.integer "content_id"
     t.string "area_ids"
     t.integer "main_office_id"
     t.datetime 'created_at'
@@ -160,6 +164,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "fax"
     t.string "website"
     t.text "description"
+    t.integer "content_id"
     t.string "overview"
     t.integer "agent_id"
     t.integer "area_office_id"
@@ -177,6 +182,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "close_time"
     t.string "no_of_products"
     t.integer "no_of_staffs"
+    t.integer "notes"
     t.datetime "area_stated_time"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -221,12 +227,31 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "agent_id"
     t.integer "area_id"
     t.integer "area_event_id"
+    t.integer "content_id"
+    t.integer "invoice_detail_id"
     t.datetime "publish_date"
     t.datetime "expiry_date"
     t.string "tag"
     t.integer "version_id"
     t.datetime "created_at"
     t.datetime "update_at"
+  end
+
+  create_table "invoice_details", :force => true do |t|
+    t.integer "product_id"
+    t.integer "area_id"
+    t.date "date"
+    t.float "amount"
+    t.float "discount"
+    t.date "invoice_date"
+    t.integer "invoice_number"
+    t.integer "service_charge"
+    t.integer "service_tax_amount"
+    t.integer "service_tax_percentage"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "product_infos", :force => true do |t|
@@ -243,6 +268,22 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "update_at"
   end
 
+  create_table "infos", :force => true do |t|
+    t.integer "content_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "notes", :force => true do |t|
+    t.integer "content_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "product_statuses", :force => true do |t|
     t.string "name"
     t.datetime "created_at"
@@ -250,6 +291,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   end
 
   create_table "area_reviews", :force =>  true do |t|
+    t.integer "rank"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -260,11 +302,21 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "update_at"
   end
 
-  create_table "articles", :force => true do |t|
+  create_table "industry_types", :force => true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "contents", :force => true do |t|
     t.string "title"
     t.string "sub_title"
     t.integer "version_id"
     t.text "description"
+    t.text "text"
+    t.boolean "note"
+    t.boolean "info"
+    t.string "type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -331,6 +383,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   create_table "avatars", :force => true do |t|
     t.string "name"
     t.string "type"
+    t.integer "image_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -399,6 +452,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
 
   create_table "themes", :force => true do |t|
     t.string "name"
+    t.integer "template_id"
     t.integer "created_by"
     t.integer "updated_by"
     t.datetime "created_at"
@@ -408,6 +462,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   create_table "templates", :force => true do |t|
     t.string "name"
     t.integer "site_id"
+    t.integer "theme_id"
     t.integer "status_id"
     t.integer "created_by"
     t.integer "updated_by"
@@ -444,6 +499,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.integer "page_id"
     t.integer "site_id"
     t.string "page_type_id"
+    t.boolean "active"
     t.integer "created_by"
     t.integer "updated_by"
     t.datetime "created_at"
@@ -474,7 +530,45 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   create_table "breadcrumbs", :force => true do |t|
     t.string "name"
     t.string "title"
+    t.integer "page_id"
+    t.integer "url_id"
     t.datetime"created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "banners", :force => true do |t|
+    t.string "name"
+    t.integer "image_id"
+    t.integer "page_id"
+    t.integer "site_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "users", :force => true do |t|
+    t.integer "name_id"
+    t.integer "address_id"
+    t.integer "subscriber_id"
+    t.integer "note_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "product_in_pages", :force => true do |t|
+    t.integer "sequence_order"
+    t.integer "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "blocks", :force => true do |t|
+    t.integer "sequence_order"
+    t.integer "page_id"
+    t.datetime "created_at"
     t.datetime "updated_at"
   end
 
