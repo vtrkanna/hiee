@@ -17,574 +17,118 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   enable_extension "plpgsql"
   enable_extension 'uuid-ossp'
 
-  create_table "subscribers", :force => true do |t|
-    t.integer "email_id"
-    t.string "alternate_mail_id"
-    t.date "date_of_birth"
-    t.integer "name_id"
-    t.integer "password_id"
-    t.integer "address_id"
-    t.integer "contact_info_id"
-    t.string "subscriber_type_id"
-    t.integer "free_subscriber_id"
-    t.integer "status_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "free_subscribers", :force => true do |t|
-    t.integer "subscriber_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "premium_subscribers", :force => true do |t|
-    t.integer "subscriber_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "names", :force => true do |t|
+  create_table "names", id: :uuid, :force => true do |t|
     t.string "first_name"
     t.string "last_name"
     t.string "full_name"
-    t.integer "last_used"
-    t.integer "subscriber_id"
+    t.uuid "last_used"
+    t.uuid "subscriber_id"
+    t.boolean "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "emails", :force => true do |t|
+  create_table "emails", id: :uuid, :force => true do |t|
     t.string "primary_mail"
     t.string "alternate_mail"
     t.string "delivery_mail"
     t.string "work_mail"
-    t.integer "version_id"
+    t.uuid "version_id"
     t.boolean "subscriber"
-    t.integer "subscriber_id"
+    t.uuid "subscriber_id"
     t.boolean "agent"
-    t.integer "agent_id"
+    t.uuid "agent_id"
     t.boolean "area"
     t.boolean "area_id"
-    t.integer "created_by"
-    t.integer "updated_by"
+    t.boolean "active"
+    t.uuid "created_by"
+    t.uuid "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "passwords", :force => true do |t|
+  create_table "contact_numbers", id: :uuid, :force => true do |t|
+    t.string "telephone"
+    t.string "primary_mb_no"
+    t.string "alternate_mb_no"
+    t.string "home_no"
+    t.boolean "home"
+    t.string "work_telephone"
+    t.string "work_mb_no"
+    t.string "office_no"
+    t.string "other"
+    t.boolean "active"
+    t.boolean "work"
+    t.datetime "created_at"
+    t.datetime "update_at"
+  end
+
+  create_table "passwords", id: :uuid, :force => true do |t|
     t.string "new"
     t.boolean "old"
-    t.integer "old_id"
-    t.integer "subscriber_id"
+    t.uuid "old_id"
+    t.uuid "subscriber_id"
+    t.boolean "active"
+    t.uuid "created_by"
+    t.uuid "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "subscriber_types", :force => true do |t|
+  create_table "countries", id: :uuid, :force => true do |t|
     t.string "name"
+    t.uuid "region_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "countries", :force => true do |t|
+  create_table "cities", id: :uuid, :force => true do |t|
     t.string "name"
-    t.integer "region_id"
+    t.uuid "country_id"
+    t.uuid "region_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "cities", :force => true do |t|
-    t.string "name"
-    t.integer "country_id"
-    t.integer "region_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "contact_infos", :force => true do |t|
-    t.boolean "subscriber_contact"
-    t.boolean "primary_contact"
-    t.boolean "work_contact"
-    t.boolean "area_contact"
-    t.boolean "agent_contact"
-    t.string "contact_status"
-    t.string "contact_type"
-    t.integer "email_id"
-    t.string "primary_mobileno"
-    t.string "primary_telephone"
-    t.string "alternate_nubmer"
-    t.string "fax"
-    t.string "work_mobile"
-    t.string "work_telephone"
-    t.string "work_location"
-    t.string "work_type"
-    t.string "work_fax"
-    t.text "desigination"
-    t.string "work_website"
-    t.integer "social_hub_id"
-    t.integer "address_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "address", :force => true do |t|
-    t.string "address_1"
-    t.string "address_2"
-    t.string "address_3"
-    t.string "address_4"
-    t.string "address_5"
-    t.integer "city_id"
-    t.integer "country_id"
-    t.integer "state_id"
-    t.integer "region_id"
-    t.string "post_code"
-    t.string "full_address"
-    t.boolean "old"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "regions", :force => true do |t|
+  create_table "regions", id: :uuid, :force => true do |t|
     t.string 'name'
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "agents", :force => true do |t|
-    t.string "name"
-    t.string "alter_name"
-    t.integer "address_id"
-    t.integer "content_id"
-    t.string "area_ids"
-    t.integer "main_office_id"
-    t.datetime 'created_at'
-    t.datetime "updated_at"
-  end
-
-  create_table "subscriber_budgets", force: true do |t|
-    t.integer "subscriber_id"
-    t.integer "min_budget"
-    t.integer "max_budget"
-    t.integer "version_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "areas", :force => true do |t|
-    t.string "name"
-    t.string "user_name"
-    t.datetime "display_name"
-    t.integer "password_id"
-    t.integer "email_id"
-    t.string "alternate_name"
-    t.integer "contact_info_id"
-    t.string "telephone"
-    t.string "fax"
-    t.string "website"
-    t.text "description"
-    t.integer "content_id"
-    t.string "overview"
-    t.integer "agent_id"
-    t.integer "area_office_id"
-    t.integer "main_office_id"
-    t.integer "area_review_id"
-    t.integer "area_event_id"
-    t.integer "area_other_info_id"
-    t.integer "social_hub_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "area_other_infos", :force => true do |t|
-    t.datetime "open_time"
-    t.datetime "close_time"
-    t.string "no_of_products"
-    t.integer "no_of_staffs"
-    t.integer "note_id"
-    t.datetime "area_stated_time"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_categories", :force => true do |t|
-    t.string "name"
-    t.string "title"
-    t.string "category_type"
-    t.integer "site_id"
-    t.integer "product_id"
-    t.integer "page_id"
-    t.integer "created_at"
-    t.integer "updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "categories", :force => true do |t|
-    t.string "name"
-    t.string "title"
-    t.string "category_type"
-    t.integer "site_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "craeted_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "departments", :force => true do |t|
-    t.string "name"
-    t.string "title"
-    t.string "category_type"
-    t.integer "site_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "craeted_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "area_subscribers", :force => true do |t|
-    t.integer "area_id"
-    t.integer "area_review_id"
-    t.string "no_subscribers"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "area_events", :force => true do |t|
-    t.string "name"
-    t.string "dispaly_name"
-    t.datetime "publish_date"
-    t.datetime "expiry_date"
+  create_table "address", id: :uuid, :force => true do |t|
+    t.string "address_1"
+    t.string "address_2"
+    t.string "address_3"
+    t.string "address_4"
+    t.string "address_5"
+    t.uuid "city_id"
+    t.uuid "country_id"
+    t.uuid "state_id"
+    t.uuid "region_id"
+    t.string "post_code"
+    t.string "full_address"
+    t.boolean "old"
     t.boolean "active"
-    t.boolean "expired"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
-  create_table "area_offices", :force => true do |t|
-    t.integer "address_id"
+  create_table "offices", id: :uuid, :force => true do |t|
+    t.uuid "address_id"
     t.boolean "main_office"
-  end
-
-  create_table "products", :force => true do |t|
-    t.string "name"
-    t.string "alternate_name"
-    t.string "title"
-    t.string "key_word"
-    t.text "description"
-    t.integer "image_id"
-    t.integer "product_status_id"
-    t.integer "product_info_id"
-    t.boolean "active"
-    t.boolean "expired"
-    t.boolean "area_event"
-    t.integer "group_id"
-    t.integer "product_type_id"
-    t.integer "agent_id"
-    t.integer "area_id"
-    t.integer "area_event_id"
-    t.integer "content_id"
-    t.integer "invoice_detail_id"
-    t.datetime "publish_date"
-    t.datetime "expiry_date"
-    t.string "tag"
-    t.integer "version_id"
+    t.uuid "active"
     t.datetime "created_at"
-    t.datetime "update_at"
+    t.datetime "updated"
   end
 
-  create_table "invoice_details", :force => true do |t|
-    t.integer "product_id"
-    t.integer "area_id"
-    t.date "date"
-    t.float "amount"
-    t.float "discount"
-    t.date "invoice_date"
-    t.integer "invoice_number"
-    t.integer "service_charge"
-    t.integer "service_tax_amount"
-    t.integer "service_tax_percentage"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_infos", :force => true do |t|
-    t.integer "product_id"
-    t.integer "product_type_id"
-    t.integer "video"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_types", :force => true do |t|
-    t.string "name"
-    t.datetime "created_at"
-    t.datetime "update_at"
-  end
-
-  create_table "infos", :force => true do |t|
-    t.integer "content_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "notes", :force => true do |t|
-    t.integer "content_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "product_statuses", :force => true do |t|
+  create_table "statuses", id: :uuid, :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "reviews", :force =>  true do |t|
-    t.integer "rank"
-    t.integer "subscriber_id"
-    t.string "format"
-    t.boolean "helpful"
-    t.integer "helpful_rate"
-    t.boolean "area"
-    t.integer "area_id"
-    t.boolean "product"
-    t.integer "product_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "groups", :force => true do |t|
-    t.string "name"
-    t.datetime "created_at"
-    t.datetime "update_at"
-  end
-
-  create_table "industry_types", :force => true do |t|
-    t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "contents", :force => true do |t|
-    t.string "title"
-    t.string "sub_title"
-    t.integer "version_id"
-    t.text "description"
-    t.text "text"
-    t.boolean "note"
-    t.boolean "info"
-    t.string "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "video_infos", :force => true do |t|
-    t.string "name"
-    t.string "title"
-    t.string "display_name"
-    t.text "description"
-    t.string "video_path"
-    t.string 'video_format'
-    t.string "author"
-    t.string "force_code"
-    t.string "file_size"
-    t.string "file_name"
-    t.integer "width"
-    t.integer "height"
-    t.string "resolution"
-    t.integer "sequence_number"
-    t.boolean "licence"
-    t.string "licence_type"
-    t.string "licence_key"
-    t.boolean "avatar"
-    t.integer "avatar_id"
-    t.integer "image_id"
-    t.integer "status_id"
-    t.integer "version_id"
-    t.string "caption"
-    t.datetime "created_by"
-    t.datetime "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "images", :force => true do |t|
-    t.string "name"
-    t.string "title"
-    t.text "description"
-    t.string "author"
-    t.string "atl_tag"
-    t.boolean "licence"
-    t.string "licence_type"
-    t.string "licence_key"
-    t.boolean "avatar"
-    t.integer "avatar_id"
-    t.string "image_type"
-    t.integer "sequence_number"
-    t.integer "width"
-    t.integer "height"
-    t.string "resolution"
-    t.string "file_size"
-    t.integer "gallery_id"
-    t.string "image_path"
-    t.string "image_source"
-    t.integer "status_id"
-    t.integer "version_id"
-    t.string "caption"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "avatars", :force => true do |t|
-    t.string "name"
-    t.string "type"
-    t.integer "image_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "audios", :force => true do |t|
-    t.string "name"
-    t.string "title"
-    t.string "author"
-    t.boolean "licence"
-    t.string "licence_type"
-    t.string "licence_key"
-    t.text "description"
-    t.string "audio_path"
-    t.string "audio_type"
-    t.integer "status_id"
-    t.integer "image_id"
-    t.integer "file_size"
-    t.string "file_name"
-    t.string "caption"
-    t.boolean "avatar"
-    t.integer "avatar_id"
-    t.integer "version_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "medias", :force => true do |t|
-    t.integer "video_info_id"
-    t.integer "image_id"
-    t.integer "product_id"
-    t.integer "area_id"
-    t.integer "agent_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "statuses", :force => true do |t|
-    t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "sites", :force => true do |t|
-    t.string "name"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "roles", :force => true do |t|
-    t.string "name"
-    t.integer "status_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "effects", :force => true do |t|
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "themes", :force => true do |t|
-    t.string "name"
-    t.integer "template_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "templates", :force => true do |t|
-    t.string "name"
-    t.integer "site_id"
-    t.integer "theme_id"
-    t.integer "status_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-  end
-
-  create_table "pages", :force => true do |t|
-    t.string "name"
-    t.integer "status_id"
-    t.integer "template_id"
-    t.integer "theme_id"
-    t.integer "site_id"
-    t.integer "page_type_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "page_types", :force => true do |t|
-    t.string "name"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "menus", :force => true do |t|
-    t.string "name"
-    t.string "title"
-    t.integer "status_id"
-    t.integer "url_id"
-    t.integer "parent_id"
-    t.integer "position"
-    t.integer "page_id"
-    t.integer "site_id"
-    t.integer "page_type_id"
-    t.boolean "active"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "urls", :force => true do |t|
-    t.string "path"
-    t.integer "site_id"
-    t.integer "page_id"
-    t.integer "version_id"
-    t.integer "created_by"
-    t.integer "updated_by"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "social_hubs", :force => true do |t|
+  create_table "social_hubs", id: :uuid, :force => true do |t|
     t.string "facebook"
     t.string "google_plus"
     t.string "twitter"
@@ -595,59 +139,529 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "update_at"
   end
 
+  create_table "subscribers", id: :uuid, :force => true do |t|
+    t.uuid "email_id"
+    t.date "date_of_birth"
+    t.uuid "name_id"
+    t.uuid "password_id"
+    t.uuid "address_id"
+    t.uuid "contact_info_id"
+    t.string "subscriber_type_id"
+    t.uuid "free_subscriber_id"
+    t.uuid "status_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "free_subscribers", id: :uuid, :force => true do |t|
+    t.uuid "subscriber_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "premium_subscribers", id: :uuid, :force => true do |t|
+    t.uuid "subscriber_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "subscriber_types", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "contact_infos", id: :uuid, :force => true do |t|
+    t.boolean "subscriber_contact"
+    t.boolean "primary_contact"
+    t.boolean "work_contact"
+    t.boolean "area_contact"
+    t.boolean "agent_contact"
+    t.string "contact_status"
+    t.string "contact_type"
+    t.uuid "email_id"
+    t.uuid "contact_number_id"
+    t.string "fax"
+    t.string "work_location"
+    t.string "work_type"
+    t.string "work_fax"
+    t.text "desigination"
+    t.string "work_website"
+    t.uuid "social_hub_id"
+    t.uuid "address_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "agents", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "alter_name"
+    t.uuid "address_id"
+    t.uuid "content_id"
+    t.uuid "contact_number_id"
+    t.string "area_ids"
+    t.uuid "main_office_id"
+    t.datetime 'created_at'
+    t.datetime "updated_at"
+  end
+
+  create_table "subscriber_budgets", id: :uuid, force: true do |t|
+    t.uuid "subscriber_id"
+    t.uuid "min_budget"
+    t.uuid "max_budget"
+    t.uuid "version_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "areas", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "user_name"
+    t.datetime "display_name"
+    t.uuid "password_id"
+    t.uuid "email_id"
+    t.uuid "contact_number_id"
+    t.string "alternate_name"
+    t.uuid "contact_info_id"
+    t.string "fax"
+    t.string "website"
+    t.text "description"
+    t.uuid "content_id"
+    t.string "overview"
+    t.uuid "agent_id"
+    t.uuid "area_office_id"
+    t.uuid "main_office_id"
+    t.uuid "area_review_id"
+    t.uuid "area_event_id"
+    t.uuid "area_other_info_id"
+    t.uuid "social_hub_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "area_other_infos", id: :uuid, :force => true do |t|
+    t.datetime "open_time"
+    t.datetime "close_time"
+    t.string "no_of_products"
+    t.uuid "no_of_staffs"
+    t.uuid "note_id"
+    t.datetime "area_stated_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "product_categories", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.string "category_type"
+    t.uuid "site_id"
+    t.uuid "product_id"
+    t.uuid "page_id"
+    t.uuid "created_at"
+    t.uuid "updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "categories", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.string "category_type"
+    t.uuid "site_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "craeted_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "departments", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.string "category_type"
+    t.uuid "site_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "craeted_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "area_subscribers", id: :uuid, :force => true do |t|
+    t.uuid "area_id"
+    t.uuid "area_review_id"
+    t.string "no_subscribers"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "area_events", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.uuid "area_id"
+    t.string "dispaly_name"
+    t.datetime "publish_date"
+    t.datetime "expiry_date"
+    t.boolean "active"
+    t.boolean "expired"
+  end
+
+
+  create_table "products", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "alternate_name"
+    t.string "title"
+    t.string "key_word"
+    t.text "description"
+    t.uuid "image_id"
+    t.uuid "product_status_id"
+    t.uuid "product_info_id"
+    t.boolean "active"
+    t.boolean "expired"
+    t.boolean "area_event"
+    t.uuid "group_id"
+    t.uuid "product_type_id"
+    t.uuid "agent_id"
+    t.uuid "area_id"
+    t.uuid "area_event_id"
+    t.uuid "content_id"
+    t.uuid "invoice_detail_id"
+    t.datetime "publish_date"
+    t.datetime "expiry_date"
+    t.string "tag"
+    t.uuid "version_id"
+    t.datetime "created_at"
+    t.datetime "update_at"
+  end
+
+  create_table "invoice_details", id: :uuid, :force => true do |t|
+    t.uuid "product_id"
+    t.uuid "area_id"
+    t.date "date"
+    t.float "amount"
+    t.float "discount"
+    t.date "invoice_date"
+    t.uuid "invoice_number"
+    t.uuid "service_charge"
+    t.uuid "service_tax_amount"
+    t.uuid "service_tax_percentage"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "product_infos", id: :uuid, :force => true do |t|
+    t.uuid "product_id"
+    t.uuid "product_type_id"
+    t.uuid "video"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "product_types", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "update_at"
+  end
+
+  create_table "infos", id: :uuid, :force => true do |t|
+    t.uuid "content_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "notes", id: :uuid, :force => true do |t|
+    t.uuid "content_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "product_statuses", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "reviews", id: :uuid, :force =>  true do |t|
+    t.uuid "rank"
+    t.uuid "subscriber_id"
+    t.string "format"
+    t.boolean "helpful"
+    t.uuid "helpful_rate"
+    t.boolean "area"
+    t.uuid "area_id"
+    t.boolean "product"
+    t.uuid "product_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "groups", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "update_at"
+  end
+
+  create_table "industry_types", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "contents", id: :uuid, :force => true do |t|
+    t.string "title"
+    t.string "sub_title"
+    t.uuid "version_id"
+    t.text "description"
+    t.text "text"
+    t.boolean "note"
+    t.boolean "info"
+    t.string "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "video_infos", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.string "display_name"
+    t.text "description"
+    t.string "video_path"
+    t.string 'video_format'
+    t.string "author"
+    t.string "force_code"
+    t.string "file_size"
+    t.string "file_name"
+    t.uuid "width"
+    t.uuid "height"
+    t.string "resolution"
+    t.uuid "sequence_number"
+    t.boolean "licence"
+    t.string "licence_type"
+    t.string "licence_key"
+    t.boolean "avatar"
+    t.uuid "avatar_id"
+    t.uuid "image_id"
+    t.uuid "status_id"
+    t.uuid "version_id"
+    t.string "caption"
+    t.datetime "created_by"
+    t.datetime "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "images", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.text "description"
+    t.string "author"
+    t.string "atl_tag"
+    t.boolean "licence"
+    t.string "licence_type"
+    t.string "licence_key"
+    t.boolean "avatar"
+    t.uuid "avatar_id"
+    t.string "image_type"
+    t.uuid "sequence_number"
+    t.uuid "width"
+    t.uuid "height"
+    t.string "resolution"
+    t.string "file_size"
+    t.uuid "gallery_id"
+    t.string "image_path"
+    t.string "image_source"
+    t.uuid "status_id"
+    t.uuid "version_id"
+    t.string "caption"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "avatars", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "type"
+    t.uuid "image_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "audios", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.string "author"
+    t.boolean "licence"
+    t.string "licence_type"
+    t.string "licence_key"
+    t.text "description"
+    t.string "audio_path"
+    t.string "audio_type"
+    t.uuid "status_id"
+    t.uuid "image_id"
+    t.uuid "file_size"
+    t.string "file_name"
+    t.string "caption"
+    t.boolean "avatar"
+    t.uuid "avatar_id"
+    t.uuid "version_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "medias", id: :uuid, :force => true do |t|
+    t.uuid "video_info_id"
+    t.uuid "image_id"
+    t.uuid "product_id"
+    t.uuid "area_id"
+    t.uuid "agent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sites", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.uuid "url_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "roles", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.uuid "status_id"
+    t.uuid "role_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "effects", id: :uuid, :force => true do |t|
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "themes", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.uuid "template_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "templates", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.uuid "site_id"
+    t.uuid "theme_id"
+    t.uuid "status_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+  end
+
+  create_table "pages", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.uuid "status_id"
+    t.uuid "template_id"
+    t.uuid "theme_id"
+    t.uuid "site_id"
+    t.uuid "page_type_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "page_types", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "menus", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.uuid "status_id"
+    t.uuid "url_id"
+    t.uuid "parent_id"
+    t.uuid "position"
+    t.uuid "page_id"
+    t.uuid "site_id"
+    t.uuid "page_type_id"
+    t.boolean "active"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "breadcrumbs", :force => true do |t|
     t.string "name"
     t.string "title"
-    t.integer "page_id"
-    t.integer "url_id"
+    t.uuid "page_id"
+    t.uuid "url_id"
     t.datetime"created_at"
     t.datetime "updated_at"
   end
 
   create_table "banners", :force => true do |t|
     t.string "name"
-    t.integer "image_id"
-    t.integer "page_id"
-    t.integer "site_id"
-    t.integer "created_by"
-    t.integer "updated_by"
+    t.uuid "image_id"
+    t.uuid "page_id"
+    t.uuid "site_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "users", :force => true do |t|
-    t.integer "name_id"
-    t.integer "address_id"
-    t.integer "subscriber_id"
-    t.integer "note_id"
-    t.integer "created_by"
-    t.integer "updated_by"
+    t.uuid "name_id"
+    t.uuid "address_id"
+    t.uuid "subscriber_id"
+    t.uuid "note_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "product_in_pages", :force => true do |t|
-    t.integer "sequence_order"
-    t.integer "page_id"
+    t.uuid "sequence_order"
+    t.uuid "page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "blocks", :force => true do |t|
-    t.integer "sequence_order"
-    t.integer "page_id"
+    t.uuid "sequence_order"
+    t.uuid "page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "terms_and_conditions", :force => true do |t|
     t.string "name"
-    t.integer "site_id"
+    t.uuid "site_id"
     t.boolean "page"
-    t.integer "page_id"
-    t.integer "content_id"
-    t.integer "created_by"
-    t.integer "updated_by"
+    t.uuid "page_id"
+    t.uuid "content_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
