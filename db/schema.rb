@@ -15,6 +15,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension 'uuid-ossp'
 
   create_table "subscribers", :force => true do |t|
     t.integer "email_id"
@@ -163,6 +164,17 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
+  create_table "subscriber_budgets", force: true do |t|
+    t.integer "subscriber_id"
+    t.integer "min_budget"
+    t.integer "max_budget"
+    t.integer "version_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "areas", :force => true do |t|
     t.string "name"
     t.string "user_name"
@@ -193,9 +205,44 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "close_time"
     t.string "no_of_products"
     t.integer "no_of_staffs"
-    t.integer "notes"
+    t.integer "note_id"
     t.datetime "area_stated_time"
     t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "product_categories", :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.string "category_type"
+    t.integer "site_id"
+    t.integer "product_id"
+    t.integer "page_id"
+    t.integer "created_at"
+    t.integer "updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "categories", :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.string "category_type"
+    t.integer "site_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "craeted_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "departments", :force => true do |t|
+    t.string "name"
+    t.string "title"
+    t.string "category_type"
+    t.integer "site_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "craeted_at"
     t.datetime "updated_at"
   end
 
@@ -301,8 +348,16 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "area_reviews", :force =>  true do |t|
+  create_table "reviews", :force =>  true do |t|
     t.integer "rank"
+    t.integer "subscriber_id"
+    t.string "format"
+    t.boolean "helpful"
+    t.integer "helpful_rate"
+    t.boolean "area"
+    t.integer "area_id"
+    t.boolean "product"
+    t.integer "product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -505,11 +560,12 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "name"
     t.string "title"
     t.integer "status_id"
-    t.string "url_id"
-    t.integer "order_id"
+    t.integer "url_id"
+    t.integer "parent_id"
+    t.integer "position"
     t.integer "page_id"
     t.integer "site_id"
-    t.string "page_type_id"
+    t.integer "page_type_id"
     t.boolean "active"
     t.integer "created_by"
     t.integer "updated_by"
@@ -518,9 +574,10 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   end
 
   create_table "urls", :force => true do |t|
-    t.string "name"
+    t.string "path"
     t.integer "site_id"
     t.integer "page_id"
+    t.integer "version_id"
     t.integer "created_by"
     t.integer "updated_by"
     t.datetime "created_at"
@@ -579,6 +636,29 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   create_table "blocks", :force => true do |t|
     t.integer "sequence_order"
     t.integer "page_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "terms_and_conditions", :force => true do |t|
+    t.string "name"
+    t.integer "site_id"
+    t.boolean "page"
+    t.integer "page_id"
+    t.integer "content_id"
+    t.integer "created_by"
+    t.integer "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "packages", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "booked_statuses", :force => true do |t|
+    t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
