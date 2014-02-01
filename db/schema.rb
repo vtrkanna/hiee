@@ -21,7 +21,15 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "first_name"
     t.string "last_name"
     t.string "full_name"
+    t.string "alternate_name"
+    t.string "nick_name"
+    t.string "user_name"
+    t.string "display_name"
     t.uuid "last_used"
+    t.boolean "subscriber"
+    t.boolean "other"
+    t.uuid "status_id"
+    t.string "type"
     t.uuid "subscriber_id"
     t.boolean "active"
     t.datetime "created_at"
@@ -115,11 +123,16 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
   end
 
   create_table "offices", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "alternate_name"
     t.uuid "address_id"
+    t.uuid "contact_number_id"
     t.boolean "main_office"
+    t.uuid "version_id"
     t.uuid "active"
+    t.uuid "sequence_order"
     t.datetime "created_at"
-    t.datetime "updated"
+    t.datetime "updated_at"
   end
 
   create_table "statuses", id: :uuid, :force => true do |t|
@@ -195,18 +208,6 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "agents", id: :uuid, :force => true do |t|
-    t.string "name"
-    t.string "alter_name"
-    t.uuid "address_id"
-    t.uuid "content_id"
-    t.uuid "contact_number_id"
-    t.string "area_ids"
-    t.uuid "main_office_id"
-    t.datetime 'created_at'
-    t.datetime "updated_at"
-  end
-
   create_table "subscriber_budgets", id: :uuid, force: true do |t|
     t.uuid "subscriber_id"
     t.uuid "min_budget"
@@ -218,14 +219,23 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "areas", id: :uuid, :force => true do |t|
+  create_table "agents", id: :uuid, :force => true do |t|
     t.string "name"
-    t.string "user_name"
-    t.datetime "display_name"
+    t.string "alter_name"
+    t.uuid "address_id"
+    t.uuid "content_id"
+    t.uuid "contact_number_id"
+    t.string "area_ids"
+    t.uuid "office_id"
+    t.datetime 'created_at'
+    t.datetime "updated_at"
+  end
+
+  create_table "areas", id: :uuid, :force => true do |t|
+    t.uuid "name_id"
     t.uuid "password_id"
     t.uuid "email_id"
     t.uuid "contact_number_id"
-    t.string "alternate_name"
     t.uuid "contact_info_id"
     t.string "fax"
     t.string "website"
@@ -234,7 +244,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "overview"
     t.uuid "agent_id"
     t.uuid "area_office_id"
-    t.uuid "main_office_id"
+    t.uuid "office_id"
     t.uuid "area_review_id"
     t.uuid "area_event_id"
     t.uuid "area_other_info_id"
@@ -309,8 +319,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
 
 
   create_table "products", id: :uuid, :force => true do |t|
-    t.string "name"
-    t.string "alternate_name"
+    t.uuid "name_id"
     t.string "title"
     t.string "key_word"
     t.text "description"
