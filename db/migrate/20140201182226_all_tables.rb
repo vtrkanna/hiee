@@ -120,7 +120,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :addresses, [:id,:address_1,:address_2,:address_3,:address_4,:address_5,:full_address,:post_code,:state_id]
+    add_index :addresses, [:id,:full_address]
 
     create_table :offices, id: :uuid do |t|
       t.string :name

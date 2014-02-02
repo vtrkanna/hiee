@@ -127,7 +127,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-  add_index :addresses, [:id,:address_1,:address_2,:address_3,:address_4,:address_5,:full_address,:post_code,:state_id]
+  add_index :addresses, [:id,:full_address]
 
   create_table "offices", id: :uuid, :force => true do |t|
     t.string "name"
