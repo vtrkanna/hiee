@@ -1,25 +1,25 @@
 class CreateSubscribers < ActiveRecord::Migration
   def change
-    create_table :subscribers do |t|
-      t.string :first_name
-      t.string :last_name
-      t.string :email_id
-      t.string :alternate_mail_id
+    enable_extension 'uuid-ossp'
+    create_table :subscribers, id: :uuid do |t|
+      t.uuid :email_id
       t.date :date_of_birth
-      t.integer :password_id
-      t.string :address_1
-      t.string :address_2
-      t.integer :city_id
-      t.integer :state_id
-      t.integer :country_id
-      t.string :post_code
-      t.string :mobile_no
+      t.uuid :name_id
+      t.uuid :password_id
+      t.uuid :address_id
+      t.uuid :contact_info_id
       t.string :subscriber_type_id
-      t.integer :free_subscriber_id
-      t.integer :user_name_id
+      t.uuid :free_subscriber_id
+      t.uuid :status_id
+      t.uuid :subscriber_into_product_id
+      t.string :remember_me
+      t.string :session_token
+      t.boolean :role
+      t.uuid :role_id
       t.datetime :created_at
       t.datetime :updated_at
       t.timestamps
     end
+    add_index :subscribers,[:id,:name_id,:password_id,:address_id,:status_id,:role_id]
   end
 end

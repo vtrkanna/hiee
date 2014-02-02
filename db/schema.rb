@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :names,[:id,:full_name,:user_name,:status_id]
 
   create_table "emails", id: :uuid, :force => true do |t|
     t.string "primary_mail"
@@ -54,6 +55,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :contact_numbers,[:id]
 
   create_table "contact_numbers", id: :uuid, :force => true do |t|
     t.string "telephone"
@@ -82,6 +84,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :passwords, [:id,:new]
 
   create_table "countries", id: :uuid, :force => true do |t|
     t.string "name"
@@ -89,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :countries,[:id,:name,:region_id]
 
   create_table "cities", id: :uuid, :force => true do |t|
     t.string "name"
@@ -97,14 +101,16 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :cities,[:id,:name,:country_id,:region_id]
 
   create_table "regions", id: :uuid, :force => true do |t|
     t.string 'name'
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :regions,[:id,:name]
 
-  create_table "address", id: :uuid, :force => true do |t|
+  create_table "addresses", id: :uuid, :force => true do |t|
     t.string "address_1"
     t.string "address_2"
     t.string "address_3"
@@ -121,6 +127,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :addresses, [:id,:address_1,:address_2,:address_3,:address_4,:address_5,:full_address,:post_code,:state_id]
 
   create_table "offices", id: :uuid, :force => true do |t|
     t.string "name"
@@ -131,15 +138,19 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.uuid "version_id"
     t.uuid "active"
     t.uuid "sequence_order"
+    t.uuid "created_by"
+    t.uuid "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :offices,[:id,:name,:main_office,:active,:adress_id,:contact_number_id]
 
   create_table "statuses", id: :uuid, :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :statuses,[:id,:name]
 
   create_table "social_hubs", id: :uuid, :force => true do |t|
     t.string "facebook"
@@ -162,21 +173,29 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "subscriber_type_id"
     t.uuid "free_subscriber_id"
     t.uuid "status_id"
+    t.uuid "subscriber_into_product_id"
+    t.string "remember_me"
+    t.string "session_token"
+    t.boolean "role"
+    t.uuid "role_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :users,[:id,:name_id,:password_id,:address_id,:status_id,:role_id]
 
   create_table "free_subscribers", id: :uuid, :force => true do |t|
     t.uuid "subscriber_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :free_subscribers, [:id, :subscriber_id]
 
   create_table "premium_subscribers", id: :uuid, :force => true do |t|
     t.uuid "subscriber_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :premium_subscribers, [:id, :subscriber_id]
 
   create_table "subscriber_types", id: :uuid, :force => true do |t|
     t.string "name"
@@ -198,7 +217,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.string "work_location"
     t.string "work_type"
     t.string "work_fax"
-    t.text "desigination"
+    t.text "designation"
     t.string "work_website"
     t.uuid "social_hub_id"
     t.uuid "address_id"
@@ -207,6 +226,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :contact_infos, [:id]
 
   create_table "subscriber_budgets", id: :uuid, force: true do |t|
     t.uuid "subscriber_id"
@@ -215,21 +235,25 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.uuid "version_id"
     t.uuid "created_by"
     t.uuid "updated_by"
+    t.uuid "subscriber_into_product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :subscriber_budgets, [:id, :subscriber_id, :min_budget, :max_budget, :subscriber_into_product_id]
 
   create_table "agents", id: :uuid, :force => true do |t|
-    t.string "name"
-    t.string "alter_name"
+    t.uuid "name_id"
     t.uuid "address_id"
     t.uuid "content_id"
     t.uuid "contact_number_id"
     t.string "area_ids"
     t.uuid "office_id"
+    t.string "remember_me"
+    t.string "session_token"
     t.datetime 'created_at'
     t.datetime "updated_at"
   end
+  add_index :emails,[:id, :name_id, :address_id, :content_id, :contact_number_id, :office_id, :areas_id]
 
   create_table "areas", id: :uuid, :force => true do |t|
     t.uuid "name_id"
@@ -243,19 +267,22 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.uuid "content_id"
     t.string "overview"
     t.uuid "agent_id"
-    t.uuid "area_office_id"
+    t.uuid "main_office_id"
     t.uuid "office_id"
     t.uuid "area_review_id"
     t.uuid "area_event_id"
     t.uuid "area_other_info_id"
     t.uuid "social_hub_id"
+    t.string "remember_me"
+    t.string "session_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :areas,[:id, :name_id, :password_id, :email_id, :main_office_id, :office_id,:content_id]
 
   create_table "area_other_infos", id: :uuid, :force => true do |t|
-    t.datetime "open_time"
-    t.datetime "close_time"
+    t.time "open_time"
+    t.time "close_time"
     t.string "no_of_products"
     t.uuid "no_of_staffs"
     t.uuid "note_id"
@@ -263,6 +290,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :area_other_infos,[:id,:open_time, :close_time, :note_id]
 
   create_table "product_categories", id: :uuid, :force => true do |t|
     t.string "name"
@@ -277,6 +305,8 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
+  add_index :product_categories, [:id,:name,:title,:category_type,:site_id,:product_id]
+
   create_table "categories", id: :uuid, :force => true do |t|
     t.string "name"
     t.string "title"
@@ -284,7 +314,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.uuid "site_id"
     t.uuid "created_by"
     t.uuid "updated_by"
-    t.datetime "craeted_at"
+    t.datetime "created_at"
     t.datetime "updated_at"
   end
 
@@ -295,7 +325,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.uuid "site_id"
     t.uuid "created_by"
     t.uuid "updated_by"
-    t.datetime "craeted_at"
+    t.datetime "created_at"
     t.datetime "updated_at"
   end
 
@@ -306,17 +336,17 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :area_subscribers,[:id, :area_id, :no_subscribers]
 
   create_table "area_events", id: :uuid, :force => true do |t|
     t.string "name"
     t.uuid "area_id"
-    t.string "dispaly_name"
+    t.string "display_name"
     t.datetime "publish_date"
     t.datetime "expiry_date"
     t.boolean "active"
     t.boolean "expired"
   end
-
 
   create_table "products", id: :uuid, :force => true do |t|
     t.uuid "name_id"
@@ -329,6 +359,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.boolean "active"
     t.boolean "expired"
     t.boolean "area_event"
+    t.boolean "active"
     t.uuid "group_id"
     t.uuid "product_type_id"
     t.uuid "agent_id"
@@ -343,6 +374,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "update_at"
   end
+  add_index :products,[:id, :name_id, :product_status_id, :product_info_id, :active, :expired, :title, :group_id, :product_type_id, :invoice_detail_id, :content_id, :tag, :version_id]
 
   create_table "invoice_details", id: :uuid, :force => true do |t|
     t.uuid "product_id"
@@ -360,19 +392,72 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :invoice_details, [:id,:product_id,:area_id,:amount,:discount,:invoice_date,:invoice_number,:invoice_number,:service_charge,:service_tax_amount,:service_tax_percentage]
 
   create_table "product_infos", id: :uuid, :force => true do |t|
     t.uuid "product_id"
     t.uuid "product_type_id"
     t.uuid "video"
+    t.uuid "booking_status_id"
+    t.uuid "invoice_detail_id"
+    t.uuid "info_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :product_infos, [:id,:product_id,:product_type_id,:video,:booking_status_id,:invoice_detail_id,:info_id]
 
   create_table "product_types", id: :uuid, :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "update_at"
+  end
+
+  create_table "subscriber_into_products", id: :uuid, :force => true do |t|
+    t.uuid "subscriber_id"
+    t.uuid "subscriber_bucket_id"
+  end
+  add_index :subscriber_into_products, [:id, :subscriber_id, :subscriber_bucket_id]
+
+  create_table "subscriber_viewed_products", id: :uuid, :force => true do |t|
+    t.uuid "subscriber_id"
+    t.uuid "product_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+  add_index :subscriber_viewed_products, [:id, :subscriber_id, :product_id]
+
+  create_table "booked_products", id: :uuid, :force => true do |t|
+    t.uuid "subscriber_id"
+    t.uuid "product_id"
+    t.uuid "area_id"
+    t.uuid "subscriber_bucket_id"
+    t.uuid "agent_id"
+    t.time "time"
+    t.uuid "quantity"
+    t.uuid "booking_status_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+  add_index :booked_products, [:id,:product_id,:subscriber_id,:area_id,:subscriber_bucket_id,:agent_id,:time,:booking_status_id]
+
+  create_table "subscriber_buckets", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.uuid "subscriber_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+  add_index :subscriber_buckets, [:id, :name, :subscriber_id]
+
+  create_table "booking_statuses", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.datetime "created_by"
+    t.datetime "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "infos", id: :uuid, :force => true do |t|
@@ -435,6 +520,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :contents,[:id,:title,:version_id,:text,:description,:note,:info,:type]
 
   create_table "video_infos", id: :uuid, :force => true do |t|
     t.string "name"
@@ -531,25 +617,33 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.uuid "product_id"
     t.uuid "area_id"
     t.uuid "agent_id"
+    t.uuid "audio_id"
+    t.uuid "site_id"
+    t.uuid "page_id"
+    t.uuid "created_by"
+    t.uuid "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :medias,[:id,:video_info_id,:image_id,:product_id,:area_id,:agent_id,:audio_id,:site_id,:page_id]
 
   create_table "sites", id: :uuid, :force => true do |t|
     t.string "name"
     t.uuid "url_id"
+    t.boolean "active"
     t.uuid "created_by"
     t.uuid "updated_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :sites, [:id,:name,:url_id,:active]
 
   create_table "roles", id: :uuid, :force => true do |t|
     t.string "name"
     t.uuid "status_id"
-    t.uuid "role_id"
     t.uuid "created_by"
     t.uuid "updated_by"
+    t.uuid "subscriber_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -582,6 +676,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
 
   create_table "pages", id: :uuid, :force => true do |t|
     t.string "name"
+    t.uuid "parent_id"
     t.uuid "status_id"
     t.uuid "template_id"
     t.uuid "theme_id"
@@ -589,14 +684,23 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.uuid "page_type_id"
     t.uuid "created_by"
     t.uuid "updated_by"
+    t.date "published"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :pages, [:name,:parent_id,:status_id,:site_id,:page_type_id,:template_id,:theme_id,:published]
 
   create_table "page_types", id: :uuid, :force => true do |t|
     t.string "name"
     t.uuid "created_by"
     t.uuid "updated_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "layouts", id: :uuid, :force => true do |t|
+    t.string "name"
+    t.string "path"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -618,7 +722,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "breadcrumbs", :force => true do |t|
+  create_table "breadcrumbs", id: :uuid, :force => true do |t|
     t.string "name"
     t.string "title"
     t.uuid "page_id"
@@ -627,7 +731,7 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "banners", :force => true do |t|
+  create_table "banners", id: :uuid, :force => true do |t|
     t.string "name"
     t.uuid "image_id"
     t.uuid "page_id"
@@ -638,32 +742,36 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "users", :force => true do |t|
+  create_table "users", id: :uuid, :force => true do |t|
     t.uuid "name_id"
     t.uuid "address_id"
     t.uuid "subscriber_id"
     t.uuid "note_id"
+    t.uuid "password_id"
     t.uuid "created_by"
     t.uuid "updated_by"
+    t.boolean "admin"
+    t.string "session_token"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+  add_index :users,[:name_id,:address_id,:subscriber_id,:note_id,:password_id,:admin]
 
-  create_table "product_in_pages", :force => true do |t|
+  create_table "product_in_pages", id: :uuid, :force => true do |t|
     t.uuid "sequence_order"
     t.uuid "page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "blocks", :force => true do |t|
+  create_table "blocks", id: :uuid, :force => true do |t|
     t.uuid "sequence_order"
     t.uuid "page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "terms_and_conditions", :force => true do |t|
+  create_table "terms_and_conditions", id: :uuid, :force => true do |t|
     t.string "name"
     t.uuid "site_id"
     t.boolean "page"
@@ -675,12 +783,12 @@ ActiveRecord::Schema.define(:version => 20140111104305) do
     t.datetime "updated_at"
   end
 
-  create_table "packages", :force => true do |t|
+  create_table "packages", id: :uuid, :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "booked_statuses", :force => true do |t|
+  create_table "booked_statuses", id: :uuid, :force => true do |t|
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
