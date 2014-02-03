@@ -20,6 +20,6 @@ class CreateSubscribers < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :subscribers,[:id,:name_id,:password_id,:address_id,:status_id,:role_id]
+    add_index :subscribers,[:id,:name_id,:password_id,:address_id,:status_id,:role_id], name: "index_subscribers"
   end
 end

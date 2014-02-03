@@ -7,7 +7,7 @@ class SubscriberDeatailTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :free_subscribers, [:id, :subscriber_id]
+    add_index :free_subscribers, [:id, :subscriber_id], name: "index_free_subscribers"
 
     create_table :premium_subscribers, id: :uuid do |t|
       t.uuid :subscriber_id
@@ -15,7 +15,7 @@ class SubscriberDeatailTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :premium_subscribers, [:id, :subscriber_id]
+    add_index :premium_subscribers, [:id, :subscriber_id], name: "index_premium_subscribers"
 
     create_table :subscriber_types, id: :uuid do |t|
       t.string :name
@@ -36,14 +36,14 @@ class SubscriberDeatailTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :subscriber_budgets, [:id, :subscriber_id, :min_budget, :max_budget, :subscriber_into_product_id]
+    add_index :subscriber_budgets, [:id, :subscriber_id, :min_budget, :max_budget, :subscriber_into_product_id], name: "index_subscriber_budgets"
 
     create_table :subscriber_into_products, id: :uuid do |t|
       t.uuid :subscriber_id
       t.uuid :subscriber_bucket_id
       t.timestamps
     end
-    add_index :subscriber_into_products, [:id, :subscriber_id, :subscriber_bucket_id]
+    add_index :subscriber_into_products, [:id, :subscriber_id, :subscriber_bucket_id], name: "index_subscriber_into_products"
 
     create_table :subscriber_viewed_products, id: :uuid do |t|
       t.uuid :subscriber_id
@@ -52,7 +52,7 @@ class SubscriberDeatailTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :subscriber_viewed_products, [:id, :subscriber_id, :product_id]
+    add_index :subscriber_viewed_products, [:id, :subscriber_id, :product_id], name: "index_subscriber_viewed_products"
 
     create_table :subscriber_buckets, id: :uuid do |t|
       t.string :name
@@ -63,7 +63,7 @@ class SubscriberDeatailTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :subscriber_buckets, [:id,:name,:subscriber_id]
+    add_index :subscriber_buckets, [:id,:name,:subscriber_id], name: "index_subscriber_buckets"
 
     create_table :booking_statuses, id: :uuid do |t|
       t.string :name

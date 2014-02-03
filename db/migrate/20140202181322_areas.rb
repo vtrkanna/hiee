@@ -1,7 +1,7 @@
 class Areas < ActiveRecord::Migration
   def change
     enable_extension 'uuid-ossp'
-    create_table areas, id: :uuid do |t|
+    create_table :areas, id: :uuid do |t|
       t.uuid :name_id
       t.uuid :password_id
       t.uuid :email_id
@@ -25,6 +25,6 @@ class Areas < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :areas,[:id, :name_id, :password_id, :email_id, :main_office_id, :office_id,:content_id]
+    add_index :areas,[:id, :name_id, :password_id, :email_id, :main_office_id, :office_id,:content_id], name: "index_areas"
   end
 end

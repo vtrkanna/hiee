@@ -12,7 +12,7 @@ class AreaRelatedTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :area_other_infos,[:id,:open_time, :close_time, :note_id]
+    add_index :area_other_infos,[:id,:open_time, :close_time, :note_id], name: "index_area_other_infos"
 
     create_table :area_subscribers, id: :uuid do |t|
       t.uuid :area_id
@@ -22,7 +22,7 @@ class AreaRelatedTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :area_subscribers,[:id, :area_id, :no_subscribers]
+    add_index :area_subscribers,[:id, :area_id, :no_subscribers], name: "index_area_subscribers"
 
     create_table :area_events, id: :uuid do |t|
       t.string :name

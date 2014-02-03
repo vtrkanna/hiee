@@ -16,6 +16,6 @@ class Pages < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :pages, [:name, :parent_id, :status_id, :site_id, :page_type_id, :template_id, :theme_id, :published]
+    add_index :pages, [:name, :parent_id, :status_id, :site_id, :page_type_id, :template_id, :theme_id, :published], name: "index_pages"
   end
 end

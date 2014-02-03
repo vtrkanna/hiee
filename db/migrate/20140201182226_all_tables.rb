@@ -20,7 +20,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :names,[:id,:full_name, :user_name, :status_id]
+    add_index :names,[:id,:full_name, :user_name, :status_id], name: "index_names"
 
     create_table :emails, id: :uuid do |t|
       t.string :primary_mail
@@ -41,7 +41,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :emails,[:id]
+    add_index :emails,[:id], name: "index_emails"
 
     create_table :contact_numbers, id: :uuid do |t|
       t.string :telephone
@@ -59,7 +59,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :update_at
       t.timestamps
     end
-    add_index :contact_numbers,[:id]
+    add_index :contact_numbers,[:id], name: "index_contact_numers"
 
     create_table :passwords, id: :uuid do |t|
       t.string :new
@@ -73,7 +73,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :passwords, [:id, :new]
+    add_index :passwords, [:id, :new], name: "index_passwords"
 
     create_table :countries, id: :uuid do |t|
       t.string :name
@@ -82,7 +82,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :countries,[:id,:name, :region_id]
+    add_index :countries,[:id,:name, :region_id], name: "index_countries"
 
     create_table :cities, id: :uuid do |t|
       t.string :name
@@ -92,7 +92,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :cities,[:id, :name, :country_id, :region_id]
+    add_index :cities,[:id, :name, :country_id, :region_id], name: "index_cities"
 
     create_table :regions, id: :uuid do |t|
       t.string :name
@@ -100,7 +100,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :regions,[:id,:name]
+    add_index :regions,[:id,:name], name: "index_regions"
 
     create_table :addresses, id: :uuid do |t|
       t.string :address_1
@@ -120,7 +120,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :addresses, [:id,:full_address]
+    add_index :addresses, [:id,:full_address], name: "index_full_address"
 
     create_table :offices, id: :uuid do |t|
       t.string :name
@@ -137,7 +137,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :offices,[:id, :name, :main_office, :active, :adress_id, :contact_number_id]
+    add_index :offices,[:id, :name, :main_office, :active, :address_id, :contact_number_id], name: "index_offices"
 
     create_table :statuses, id: :uuid do |t|
       t.string :name
@@ -145,7 +145,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :statuses,[:id,:name]
+    add_index :statuses,[:id,:name], name: "index_statuses"
 
     create_table :social_hubs, id: :uuid do |t|
       t.string :facebook
@@ -183,7 +183,7 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :contact_infos, [:id]
+    add_index :contact_infos, [:id], name: "index_contact_infos"
 
     create_table :infos, id: :uuid do |t|
       t.uuid :content_id
@@ -254,6 +254,6 @@ class AllTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :contents,[:id, :title, :version_id, :text, :description, :note, :info, :type]
+    add_index :contents,[:id, :title, :version_id, :text, :description, :note, :info, :type], name: "index_contents"
   end
 end

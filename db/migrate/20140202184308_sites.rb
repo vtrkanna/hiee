@@ -11,6 +11,6 @@ class Sites < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :sites, [:id,:name,:url_id,:active]
+    add_index :sites, [:id,:name,:url_id,:active], name: "index_sites"
   end
 end

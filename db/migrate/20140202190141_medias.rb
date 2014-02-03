@@ -16,6 +16,6 @@ class Medias < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :medias,[:id, :video_info_id, :image_id, :product_id, :area_id, :agent_id, :audio_id, :site_id, :page_id]
+    add_index :medias,[:id, :video_info_id, :image_id, :product_id, :area_id, :agent_id, :audio_id, :site_id, :page_id], name: "index_medias"
   end
 end

@@ -1,7 +1,7 @@
 class Products < ActiveRecord::Migration
   def change
     enable_extension 'uuid-ossp'
-    create_table products, id: :uuid do |t|
+    create_table :products, id: :uuid do |t|
       t.uuid :name_id
       t.string :title
       t.string :key_word
@@ -27,6 +27,6 @@ class Products < ActiveRecord::Migration
       t.datetime :update_at
       t.timestamps
     end
-    add_index :products,[:id, :name_id, :product_status_id, :product_info_id, :active, :expired, :title, :group_id, :product_type_id, :invoice_detail_id, :content_id, :tag, :version_id]
+    add_index :products,[:id, :name_id, :product_status_id, :product_info_id, :active, :expired, :title, :group_id, :product_type_id, :invoice_detail_id, :content_id, :tag, :version_id], name: "index_products"
   end
 end

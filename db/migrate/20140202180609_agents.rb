@@ -14,6 +14,6 @@ class Agents < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :emails,[:id, :name_id, :address_id, :content_id, :contact_number_id, :office_id, :areas_id]
+    add_index :agents,[:id, :name_id, :address_id, :content_id, :contact_number_id, :office_id, :area_ids], name: "index_agents"
   end
 end

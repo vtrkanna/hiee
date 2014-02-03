@@ -14,7 +14,7 @@ class ProductRelatedTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :product_categories, [:id, :name, :title, :category_type, :site_id, :product_id]
+    add_index :product_categories, [:id, :name, :title, :category_type, :site_id, :product_id], name: "index_product_categories"
 
     create_table :invoice_details, id: :uuid do |t|
       t.uuid :product_id
@@ -33,7 +33,7 @@ class ProductRelatedTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :invoice_details, [:id, :product_id, :area_id, :amount, :discount, :invoice_date, :invoice_number, :invoice_number, :service_charge, :service_tax_amount, :service_tax_percentage]
+    add_index :invoice_details, [:id, :product_id, :area_id, :amount, :discount, :invoice_date, :invoice_number, :invoice_number, :service_charge, :service_tax_amount, :service_tax_percentage], name: "index_invoice_details"
 
     create_table :product_infos, id: :uuid do |t|
       t.uuid :product_id
@@ -46,7 +46,7 @@ class ProductRelatedTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :product_infos, [:id, :product_id, :product_type_id, :video, :booking_status_id, :invoice_detail_id, :info_id]
+    add_index :product_infos, [:id, :product_id, :product_type_id, :video, :booking_status_id, :invoice_detail_id, :info_id], name: "index_product_infos"
 
     create_table :product_types, id: :uuid do |t|
       t.string :name
@@ -70,7 +70,7 @@ class ProductRelatedTables < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :booked_products, [:id, :product_id, :subscriber_id, :area_id, :subscriber_bucket_id, :agent_id, :time, :booking_status_id]
+    add_index :booked_products, [:id, :product_id, :subscriber_id, :area_id, :subscriber_bucket_id, :agent_id, :time, :booking_status_id], name: "index_booked_products"
 
     create_table :product_statuses, id: :uuid do |t|
       t.string :name

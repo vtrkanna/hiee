@@ -15,6 +15,6 @@ class Users < ActiveRecord::Migration
       t.datetime :updated_at
       t.timestamps
     end
-    add_index :users,[:name_id, :address_id, :subscriber_id, :note_id, :password_id, :admin]
+    add_index :users,[:name_id, :address_id, :subscriber_id, :note_id, :password_id, :admin], name: "index_users"
   end
 end
