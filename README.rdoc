@@ -50,3 +50,5 @@ Migrate manually
     * rails generate migration Names
 Rails Model Generator without Migration
     * rails g model name --migration=false
+Generator controller without view & helper & asstes
+    * rails g controller agent --skip-helper --skip-assets --skip-view
