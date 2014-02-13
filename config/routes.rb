@@ -1,4 +1,7 @@
 Hiee::Application.routes.draw do
+  get "new_subscriber" => "subscriber#new_subscriber"
+  get "create_subscriber" => "subscriber#create_subs"
+  get 'sites' => 'sites#list'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
