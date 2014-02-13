@@ -1,0 +1,20 @@
+<h1>Sites</h1>
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @site.each do |site| %>
+  <tr>
+    <td>
+      <%=site.name  %>
+    </td>
+    <td>
+      <%= site.url_id %>
+    </td>
+  </tr>
+      <% end %>
+  </tbody>
+</table>

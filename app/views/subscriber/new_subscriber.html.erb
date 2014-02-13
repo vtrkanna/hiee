@@ -1,0 +1,16 @@
+<h1>hi</h1>
+<table>
+  <tbody>
+  <thead>
+  <tr>
+    <th>first name</th>
+    <th>last name</th>
+  </tr>
+  </thead>
+  <% @subs.each do |sub| %>
+      <tr><%= sub.first_name %></tr>
+      <tr>&nbsp;</tr>
+      <tr><%= sub.last_name %></tr>
+  <% end %>
+  </tbody>
+</table>
