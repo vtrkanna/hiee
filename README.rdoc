@@ -52,3 +52,8 @@ Rails Model Generator without Migration
     * rails g model name --migration=false
 Generator controller without view & helper & asstes
     * rails g controller agent --skip-helper --skip-assets --skip-view
+Solr Gongig
+    *install solr
+    * https://github.com/sunspot/sunspot : coonfig Sunspot
+    
+
