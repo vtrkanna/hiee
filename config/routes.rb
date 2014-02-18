@@ -1,4 +1,5 @@
 Hiee::Application.routes.draw do
+  get "/" => "pages#home"
   get "new_subscriber" => "subscriber#new_subscriber"
   get "create_subscriber" => "subscriber#create_subs"
   get 'sites' => 'sites#list'
