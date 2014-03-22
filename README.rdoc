@@ -55,5 +55,5 @@ Generator controller without view & helper & asstes
 Solr Gongig
     *install solr
     * https://github.com/sunspot/sunspot : coonfig Sunspot
-    
+
 
